@@ -24,11 +24,42 @@ np.asarray => Input data, in any form that can be converted to an array. This in
 transforms the circle images to array 
 '''
 X_triangle = np.asarray([transform.resize(im, SIZE) for im in triangle])
-
+'''
+skimage.transform.resize(image, output_shape) => Resize image to match certain size
+np.asarray => Input data, in any form that can be converted to an array. This includes lists, lists of tuples, tuples, tuples of tuples, tuples of lists and ndarrays.
+transforms the triangle images to array 
+'''
 X = np.concatenate((X_circle, X_triangle), axis=0)
+'''
+Concatenates the input of both the arrays into 1 as in example below
+>>> a = np.array([[1, 2], [3, 4]])
+>>> b = np.array([[5, 6]])
+>>> np.concatenate((a, b), axis=0)
+array([[1, 2],
+       [3, 4],
+       [5, 6]])
+'''
 Y = np.concatenate((np.ones(X_circle.shape[0]),
                     np.zeros(X_triangle.shape[0])))
+'''
+>>> y
+array([[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+       [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],
+       [ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]])
+>>> y.shape = (3, 6)
 
+>>> s = (2,2)
+>>> np.ones(s)
+array([[ 1.,  1.],
+       [ 1.,  1.]])
+
+>>> s = (2,2)
+>>> np.zeros(s)
+array([[ 0.,  0.],
+       [ 0.,  0.]])
+
+np.concatenate as above              
+'''
 Y = np.zeros((X.shape[0], 2))
 Y[:X_circle.shape[0], 1] = np.ones(X_circle.shape[0])
 Y[-X_triangle.shape[0]:, 0] = np.ones(X_triangle.shape[0])
