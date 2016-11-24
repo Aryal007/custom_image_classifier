@@ -10,7 +10,7 @@ from tflearn.data_utils import shuffle
 
 from model import setup_model
 
-SIZE = (2, 2)
+SIZE = (32, 32)
 
 np.set_printoptions(threshold=np.nan)		#to view the full printed array
 
@@ -114,20 +114,43 @@ We then put the value of first circle.shape[0](i.e. 3) elements as [0. 1.] to de
 Then we put the value of last triangle.shape[0](i.e. 4) elements as [1., 0.] to denote a triangle
 '''
 n_training = int(X.shape[0] * .66)
+'''
+Since we are using 66% of our data as training set and rest as testing set
+'''
 # print n_training
 # 6*0.66 = 3.96 = integer 3
 # print X
 # print Y
 X, Y = shuffle(X, Y)
-print X,Y
-exit(0)
+'''
+Generally it is considered safer to shuffle the data, as the partitions created will come from 
+different sources if the data we collected comes from different source. Would show little or
+no effect on randomly generated data. 
+'''
 X, X_test, Y, Y_test = X[:n_training], X[n_training:], Y[:n_training], Y[n_training:]
-
+'''
+First n_training number of dataset is used to train with corresponding X values and Y outputs
+remaining number of datas are used as test data with corresponding X values and Y outputs
+'''
 model = setup_model()
+'''
+calls the setup_model() function from model.py and assigns the returned output to model variable
+'''
+# Train it! We'll do 1000 training passes and monitor it as it goes.
 
-# Train it! We'll do 100 training passes and monitor it as it goes.
 model.fit(X, Y, n_epoch=1000, shuffle=True, validation_set=(X_test, Y_test),
           show_metric=True, batch_size=100, snapshot_epoch=True,
           run_id='classifier')
-
+'''
+X,Y = training data
+n_epoch = number of epoch to run
+shuffle = overrides all network estimators 'shuffle' Why?
+validation_set=(X_test, Y_test) = validation data
+show_metric =  Display or not accuracy at every step.
+batch_size = overrides all network estimators 'validation_batch_size' by this value
+snapshot_epoch = If True, it will snapshot model at the end of every epoch. 
+				(Snapshot a model will evaluate this model on validation set, 
+				as well as create a checkpoint if 'checkpoint_path' specified).
+run_id = Give a name for this run. (Useful for Tensorboard).
+'''
 model.save("classifier.tfl")

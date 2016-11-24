@@ -9,6 +9,7 @@ import os
 from skimage import io
 from skimage import transform
 
+from PIL import Image             #to show image
 from model import setup_model
 
 SIZE = (32, 32)
@@ -25,6 +26,10 @@ for filename in filenames:
     try:
         im = io.imread(filepath)
         im = transform.resize(im, SIZE)
+
+        # img = Image.fromarray(im, 'RGB')
+        # img.show()
+
     except ValueError:
         print("Error")
         # print("Unable to load: {:s}".format(filepath), file = sys.stderr)
